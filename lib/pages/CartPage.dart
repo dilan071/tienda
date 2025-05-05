@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tienda/widgets/CartAppBar.dart';
+import 'package:tienda/widgets/CartBottomNavBar.dart';
 import 'package:tienda/widgets/CartItemSamples.dart';
 
 class CartPage extends StatelessWidget {
@@ -46,7 +47,7 @@ class CartPage extends StatelessWidget {
                     fontSize: 16,
                     ),
                     ),
-                    )
+                    ),
                 ],
                 ),
               ),
@@ -54,6 +55,7 @@ class CartPage extends StatelessWidget {
           )
         ],
       ),
+      bottomNavigationBar: CartBottomNavBar(),
     );
   }
 }

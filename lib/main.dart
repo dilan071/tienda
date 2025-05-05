@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tienda/pages/CartPage.dart';
 import 'package:tienda/pages/Homepage.dart';
+import 'package:tienda/pages/ItemPage.dart';
 
 // Run | Debug | Profile
 void main() => runApp(MyApp());
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
             ), // ThemeData
             routes: {
                 "/": (context) => HomePage(),
-                "cartPage": (context) => CartPage()
+                "cartPage": (context) => CartPage(),
+                "itemPage": (context) => ItemPage()
             },
         ); // MaterialApp
     }
