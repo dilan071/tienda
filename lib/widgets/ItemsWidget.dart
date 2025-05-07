@@ -1,103 +1,127 @@
 import 'package:flutter/material.dart';
 
 class ItemsWidget extends StatelessWidget {
+  final List<Map<String, dynamic>> productos;
+
+  const ItemsWidget({
+    Key? key,
+    required this.productos,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      childAspectRatio: 0.68,
-      //it disable the scroll funcionality of grid view
-      //then it will scroll in list view  of home page
-      physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
+    return GridView.builder(
       shrinkWrap: true,
-      children: [
-        for(int i=1; i<8;i++)
-        Container(
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: productos.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.68,
+      ),
+      itemBuilder: (context, index) {
+        final producto = productos[index];
+        return Container(
           padding: EdgeInsets.only(left: 15, right: 15, top: 10),
           margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset(0, 3),
+              ),
+            ],
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF4C53A5),
-                      borderRadius: BorderRadius.circular(20),
+                  if ((producto['descuento'] as int) > 0)
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF4C53A5),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        "-${producto['descuento']}%",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    child: Text(
-                      "-50%", 
-                      style: TextStyle(
-                      fontSize: 14, 
-                      color: Colors.white, 
-                      fontWeight: FontWeight.bold,
-                    ),
-                    ),
-                  ),                
                   Icon(
                     Icons.favorite_border,
                     color: Colors.red,
-                  )
+                  ),
                 ],
               ),
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, "itemPage");
+                  Navigator.pushNamed(context, 'itemPage');
                 },
                 child: Container(
-                  margin: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(vertical: 10),
                   child: Image.asset(
-                    "images/$i.png",
-                     height: 120,
-                     width: 120,)
+                    producto['imagen'],
+                    height: 120,
+                    width: 120,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-              Container(
-               padding: EdgeInsets.only(bottom: 8),
-               alignment: Alignment.centerLeft,
-               child: Text(
-                "produc title",
+              Text(
+                producto['titulo'],
                 style: TextStyle(
-                fontSize: 18,
-                color: Color(0xFF4C53A5),
-                fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Color(0xFF4C53A5),
+                  fontWeight: FontWeight.bold,
                 ),
-               ),  
-               ),
-               Container(
-                alignment: Alignment.centerLeft,
-                child: Text("write description of product", 
+              ),
+              SizedBox(height: 4),
+              Text(
+                producto['descripcion'],
                 style: TextStyle(
-                  fontSize: 15,
-                  color: Color(0xFF4C53A5), 
+                  fontSize: 13,
+                  color: Color(0xFF4C53A5),
                 ),
-                ),
-               ),
-               Padding(padding: EdgeInsets.symmetric(vertical: 10),
-               child: Row(
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 8),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "\$55",
-                    style: TextStyle(fontSize: 16, 
-                    fontWeight: FontWeight.bold, 
-                    color: Color(0xFF4C53A5)),
+                    '\\${(producto['precio'] as double).toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF4C53A5),
+                    ),
                   ),
-                  Icon(
-                    Icons.shopping_cart_checkout, 
-                    color: Color(0xFF4C53A5),
-                  )
+                  IconButton(
+                    icon: Icon(
+                      Icons.shopping_cart_checkout,
+                      color: Color(0xFF4C53A5),
+                    ),
+                    onPressed: () {
+                      // acción al añadir al carrito
+                    },
+                  ),
                 ],
-               ),)
+              ),
             ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

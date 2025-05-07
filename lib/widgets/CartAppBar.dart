@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-class CartAppBar extends StatelessWidget {
+class CartAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 25);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -9,10 +12,7 @@ class CartAppBar extends StatelessWidget {
       child: Row(
         children: [
           InkWell(
-            onTap: () {
-              // goes back to previous screen/page
-              Navigator.pop(context);
-            },
+            onTap: () => Navigator.pop(context),
             child: Icon(
               Icons.arrow_back,
               size: 30,
@@ -31,14 +31,40 @@ class CartAppBar extends StatelessWidget {
             ),
           ),
           Spacer(),
-          Icon(
-            Icons.more_vert,
-            size: 30,
-            color: Color(0xFF4C53A5),
-          )
-        ]),
+          InkWell(
+            onTap: () => showModalBottomSheet(
+              context: context,
+              builder: (_) => _buildMoreOptionsSheet(context),
+            ),
+            child: Icon(
+              Icons.more_vert,
+              size: 30,
+              color: Color(0xFF4C53A5),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMoreOptionsSheet(BuildContext ctx) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+          leading: Icon(Icons.delete_outline),
+          title: Text("Vaciar carrito"),
+          onTap: () {
+            // TODO: implementar lógica para vaciar el carrito
+            Navigator.pop(ctx);
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.close),
+          title: Text("Cancelar"),
+          onTap: () => Navigator.pop(ctx),
+        ),
+      ],
     );
   }
 }
-          
-   

@@ -2,6 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ItemBottomNavBar extends StatelessWidget {
+  final double price; // Precio del producto
+  final VoidCallback onAddToCart; // Callback para agregar al carrito
+
+  const ItemBottomNavBar({
+    Key? key,
+    required this.price,
+    required this.onAddToCart,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -23,32 +32,35 @@ class ItemBottomNavBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // Muestra el precio del producto con formato
             Text(
-              "\$120",
+              '\$${price.toStringAsFixed(2)}', // Formatea el precio con dos decimales
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF4C53A5),
+                color: Color(0xFF4C53A5), // Color del precio
               ),
             ),
+            // Botón para añadir al carrito
             ElevatedButton.icon(
-              onPressed:() {},
-              icon: Icon(CupertinoIcons.cart_badge_plus),
+              onPressed: onAddToCart, // Llama al callback cuando se presiona
+              icon: Icon(CupertinoIcons.cart_badge_plus), // Icono de carrito
               label: Text(
-                "add to cart", 
+                "Add to cart", // Texto del botón
                 style: TextStyle(
-                  fontSize: 16, 
-                  fontWeight: FontWeight.bold),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color(0xFF4C53A5)),
-                    padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-                    ),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-                  ),
-            
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Color(0xFF4C53A5)), // Color de fondo
+                padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(vertical: 13, horizontal: 15), // Padding interno
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), // Bordes redondeados
+                ),
+              ),
             ),
           ],
         ),
