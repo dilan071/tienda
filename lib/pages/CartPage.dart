@@ -49,12 +49,17 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _loadCartItems() {
-    // TODO: reemplazar con datos reales de tu estado o API
+    
     setState(() {
       _cartItems = [
         CartItem(id: 'p1', title: 'Tacones', imagePath: 'images/1.png', price: 55.0, quantity: 2),
         CartItem(id: 'p2', title: 'Reloj clásico', imagePath: 'images/2.png', price: 120.0, quantity: 1),
         CartItem(id: 'p3', title: 'Bolso elegante', imagePath: 'images/3.png', price: 75.0, quantity: 3),
+        CartItem(id: 'p3', title: 'Bolso elegante', imagePath: 'images/4.png', price: 67.0, quantity: 3),
+        CartItem(id: 'p3', title: 'Bolso de carga', imagePath: 'images/5.png', price: 95.0, quantity: 4),
+        CartItem(id: 'p3', title: 'Bolso elegante', imagePath: 'images/6.png', price: 60.0, quantity: 5),
+        CartItem(id: 'p3', title: 'Bolso elegante', imagePath: 'images/7.png', price: 30.0, quantity: 2),
+        
       ];
     });
   }
