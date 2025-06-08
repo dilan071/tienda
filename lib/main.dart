@@ -9,7 +9,7 @@ import 'Screens/ItemPage.dart';
 import 'Screens/favorites_page.dart';
 import 'Screens/orders_page.dart';
 
-import 'controllers/product_controller.dart'; // 🆕
+import 'controllers/product_controller.dart';
 import 'providers/cart_provider.dart';
 import 'providers/favorites_provider.dart';
 import 'providers/orders_provider.dart';
@@ -33,17 +33,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-      ),
       initialRoute: '/',
       routes: {
-        '/': (context)      => HomePage(),
-        '/cartPage': (context) => CartPage(),
-        '/orders': (context)   => OrdersPage(),
-        '/itemPage': (context) => ItemPage(),
+        '/': (context)          => HomePage(),
+        '/cartPage': (context)  => CartPage(),
+        '/favorites': (context) => FavoritesPage(),
+        '/orders': (context)    => OrdersPage(),
+        '/itemPage': (context)  => ItemPage(),
         CheckoutPage.routeName: (context) => CheckoutPage(),
-        '/favorites': (context)  => FavoritesPage(),
       },
     );
   }

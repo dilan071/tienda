@@ -1,7 +1,10 @@
+// lib/widgets/ItemsWidget.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../models/product.dart';
 import '../providers/favorites_provider.dart';
+import '../providers/cart_provider.dart';
 
 class ItemsWidget extends StatelessWidget {
   final List<Product> productos;
@@ -23,11 +26,9 @@ class ItemsWidget extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         final producto = productos[index];
-
         return Consumer<FavoritesProvider>(
           builder: (context, favProv, _) {
-            final isFavorite = favProv.isFavorite(producto);
-
+            final isFav = favProv.isFavorite(producto.id);
             return Container(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -48,41 +49,39 @@ class ItemsWidget extends StatelessWidget {
                 children: [
                   // Icono de favorito
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
                         icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          isFav ? Icons.favorite : Icons.favorite_border,
                           color: Colors.red,
                         ),
-                        onPressed: () {
-                          favProv.toggleFavorite(producto);
-                        },
+                        onPressed: () => favProv.toggleFavorite(producto),
                       ),
                     ],
                   ),
+                  // Imagen y detalle
                   InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/itemPage',
-                          arguments: producto);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
+                    onTap: () => Navigator.pushNamed(
+                      context,
+                      '/itemPage',
+                      arguments: producto,
+                    ),
+                    child: Center(
                       child: Image.network(
                         producto.image,
                         height: 120,
                         width: 120,
                         fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
-                            Icons.broken_image,
-                            size: 120,
-                            color: Colors.grey,
-                          );
-                        },
+                        errorBuilder: (c, _, __) => const Icon(
+                          Icons.broken_image,
+                          size: 120,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                   ),
+                  const SizedBox(height: 8),
                   Text(
                     producto.title,
                     style: const TextStyle(
@@ -90,6 +89,8 @@ class ItemsWidget extends StatelessWidget {
                       color: Color(0xFF4C53A5),
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -101,7 +102,7 @@ class ItemsWidget extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -115,12 +116,11 @@ class ItemsWidget extends StatelessWidget {
                       ),
                       IconButton(
                         icon: const Icon(
-                          Icons.shopping_cart_checkout,
+                          Icons.shopping_cart,
                           color: Color(0xFF4C53A5),
                         ),
-                        onPressed: () {
-                          
-                        },
+                        onPressed: () =>
+                            context.read<CartProvider>().addProduct(producto),
                       ),
                     ],
                   ),
