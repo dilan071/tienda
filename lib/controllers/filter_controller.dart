@@ -10,7 +10,7 @@ class FilterController {
   }) {
     return products.where((product) {
       final title = product.title.toLowerCase();
-      final matchesSearch = title.contains(searchQuery.toLowerCase());
+      final matchesSearch = searchQuery.isEmpty || title.contains(searchQuery.toLowerCase());
       final matchesMinPrice = minPrice == null || product.price >= minPrice;
       final matchesMaxPrice = maxPrice == null || product.price <= maxPrice;
       return matchesSearch && matchesMinPrice && matchesMaxPrice;
