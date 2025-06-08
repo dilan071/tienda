@@ -1,41 +1,40 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/product.dart';
 import '../models/cart_item.dart';
 
 class CartProvider with ChangeNotifier {
-  // Lista privada de items en el carrito (de tipo CartItem)
   final List<CartItem> _items = [];
 
-  // Lista pública de items, de solo lectura para fuera del provider
   List<CartItem> get items => List.unmodifiable(_items);
 
-  // Obtener el monto total del carrito sumando el total de cada item
-  double get totalAmount {
-    return _items.fold(0.0, (sum, item) => sum + item.totalPrice);
+  double get totalAmount =>
+      _items.fold(0.0, (sum, item) => sum + item.totalPrice);
+
+  CartProvider() {
+    _loadCartFromPrefs();
   }
 
-  // Agregar un producto al carrito
   void addProduct(Product product) {
     final index = _items.indexWhere((item) => item.product.id == product.id);
 
     if (index >= 0) {
-      // Si el producto ya está en el carrito, aumentar cantidad
       _items[index].quantity++;
     } else {
-      // Si no está, agregar nuevo CartItem con cantidad 1
       _items.add(CartItem(product: product));
     }
 
+    _saveCartToPrefs();
     notifyListeners();
   }
 
-  // Remover un producto del carrito por ID
   void removeProduct(String productId) {
     _items.removeWhere((item) => item.product.id == productId);
+    _saveCartToPrefs();
     notifyListeners();
   }
 
-  // Disminuir la cantidad de un producto en el carrito
   void decreaseQuantity(String productId) {
     final index = _items.indexWhere((item) => item.product.id == productId);
 
@@ -45,13 +44,35 @@ class CartProvider with ChangeNotifier {
       } else {
         _items.removeAt(index);
       }
+      _saveCartToPrefs();
       notifyListeners();
     }
   }
 
-  // Vaciar completamente el carrito
   void clearCart() {
     _items.clear();
+    _saveCartToPrefs();
     notifyListeners();
+  }
+
+  // ------------------- PERSISTENCIA -------------------
+
+  Future<void> _saveCartToPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> jsonCart =
+        _items.map((item) => jsonEncode(item.toJson())).toList();
+    await prefs.setStringList('cart_items', jsonCart);
+  }
+
+  Future<void> _loadCartFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? jsonCart = prefs.getStringList('cart_items');
+    if (jsonCart != null) {
+      _items.clear();
+      _items.addAll(
+        jsonCart.map((item) => CartItem.fromJson(jsonDecode(item))),
+      );
+      notifyListeners();
+    }
   }
 }

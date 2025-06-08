@@ -11,7 +11,7 @@ import '../widgets/ItemAppBar.dart';
 import '../widgets/ItemBottomNavBar.dart';
 
 class ItemPage extends StatefulWidget {
-  static const String routeName = '/itemPage'; // Asegúrate de incluir la '/'
+  static const String routeName = '/itemPage'; 
 
   @override
   _ItemPageState createState() => _ItemPageState();

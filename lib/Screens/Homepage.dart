@@ -5,7 +5,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/filter_controller.dart';
-import '../controllers/product_controller.dart';  // <-- ahora usamos el controller
+import '../controllers/product_controller.dart';  
 import '../providers/cart_provider.dart';
 
 import '../widgets/CategoriesWidgets.dart';
