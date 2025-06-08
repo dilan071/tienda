@@ -63,7 +63,7 @@ class ItemsWidget extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, 'itemPage',
+                      Navigator.pushNamed(context, '/itemPage',
                           arguments: producto);
                     },
                     child: Container(

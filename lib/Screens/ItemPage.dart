@@ -1,15 +1,17 @@
- import 'package:clippy_flutter/clippy_flutter.dart';
+// lib/pages/ItemPage.dart
+import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
 import '../widgets/ItemAppBar.dart';
 import '../widgets/ItemBottomNavBar.dart';
 
 class ItemPage extends StatefulWidget {
-  static const String routeName = 'itemPage';
+  static const String routeName = '/itemPage'; // Asegúrate de incluir la '/'
 
   @override
   _ItemPageState createState() => _ItemPageState();
@@ -49,6 +51,7 @@ class _ItemPageState extends State<ItemPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Recibe el producto a través de arguments
     final Product product = ModalRoute.of(context)!.settings.arguments as Product;
 
     return Scaffold(
