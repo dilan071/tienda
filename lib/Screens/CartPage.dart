@@ -1,14 +1,14 @@
 // lib/pages/CartPage.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid.dart'; // 👈 Import para generar IDs únicos
 
 import '../providers/cart_provider.dart';
 import '../models/cart_item.dart' as ci;
 import '../widgets/CartAppBar.dart';
 import '../widgets/CartItemSamples.dart';
-import '../providers/orders_provider.dart';
-import '../models/order.dart'; 
+import '../providers/orders_provider.dart'; // 👈 Importamos el provider de órdenes
+import '../models/order.dart'; // 👈 Importamos el modelo de orden
 
 class CartPage extends StatefulWidget {
   static const String routeName = 'cartPage';
@@ -53,19 +53,19 @@ class _CartPageState extends State<CartPage> {
         _isLoading = true;
       });
 
-      await Future.delayed(Duration(seconds: 2)); 
+      await Future.delayed(Duration(seconds: 2)); // Simula procesamiento
 
       final now = DateTime.now();
-      final uuid = Uuid();
+      final uuid = Uuid(); // Instancia del generador UUID
 
       // Guardar cada ítem del carrito como una orden
       for (var item in items) {
         final order = Order(
-          id: uuid.v4(), 
-          productName: item.product.title,
+          id: uuid.v4(), // 👈 ID generado automáticamente
+          productName: item.product.title, // 👈 Asegúrate que 'title' exista en Product
           price: item.totalPrice,
           quantity: item.quantity,
-          imageUrl: item.product.image, 
+          imageUrl: item.product.image,   // 👈 Asegúrate que 'image' exista en Product
           date: now,
         );
         orders.addOrder(order);
