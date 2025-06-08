@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../controllers/filter_controller.dart';
 import '../providers/product_provider.dart';
+import '../providers/cart_provider.dart';
+
 import '../widgets/CategoriesWidgets.dart';
 import '../widgets/HomeAppBar.dart';
 import '../widgets/ItemsWidget.dart';
 import '../widgets/loading.dart';
 import '../widgets/empty_state.dart';
-import '../providers/cart_provider.dart';
 import '../widgets/product_search_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -125,13 +127,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(
       builder: (context, productProv, _) {
-        final filteredProducts = productProv.products.where((product) {
-          final title = product.title.toLowerCase();
-          final matchesSearch = title.contains(_searchQuery.toLowerCase());
-          final matchesMinPrice = _minPrice == null || product.price >= _minPrice!;
-          final matchesMaxPrice = _maxPrice == null || product.price <= _maxPrice!;
-          return matchesSearch && matchesMinPrice && matchesMaxPrice;
-        }).toList();
+        final filteredProducts = FilterController.filterProducts(
+          products: productProv.products,
+          searchQuery: _searchQuery,
+          minPrice: _minPrice,
+          maxPrice: _maxPrice,
+        );
 
         return Scaffold(
           body: ListView(
@@ -151,7 +152,6 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Column(
                   children: [
-                    // Título Categorías
                     Container(
                       alignment: Alignment.centerLeft,
                       margin:
@@ -170,15 +170,9 @@ class _HomePageState extends State<HomePage> {
                       selectedIndex: _selectedCategoryIndex,
                       onCategoryTap: _onCategoryTap,
                     ),
-
                     const SizedBox(height: 10),
-
-                    // Barra de búsqueda
                     ProductSearchBar(onChanged: _updateSearchQuery),
-
                     const SizedBox(height: 10),
-
-                    // Filtros precio con botón limpiar filtros
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
@@ -216,9 +210,7 @@ class _HomePageState extends State<HomePage> {
                               },
                             ),
                           ),
-
                           const SizedBox(width: 10),
-
                           ElevatedButton(
                             onPressed: _clearFilters,
                             style: ElevatedButton.styleFrom(
@@ -232,10 +224,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
-                    // Título productos
                     Container(
                       alignment: Alignment.centerLeft,
                       margin:
@@ -249,7 +238,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
                     if (productProv.isLoading)
                       const Loading()
                     else if (productProv.errorMessage != null)
@@ -268,7 +256,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: Colors.transparent,
             height: 70,
