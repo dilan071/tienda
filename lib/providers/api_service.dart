@@ -19,7 +19,7 @@ class ApiService {
     }
   }
 
-  /// Obtiene los productos de una categoría específica, por ejemplo 'jewelery'.
+  /// Obtiene los productos de una categoría específica.
   static Future<List<Product>> fetchProductsByCategory(String category) async {
     
     final url = Uri.parse('$_baseUrl/products/category/$category');

@@ -41,7 +41,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   uuid: ^4.0.0
   http: ^0.13.6
-
+  shared_preferences: ^2.2.2
   
 
 
@@ -63,7 +63,6 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-  - assets/placeholder.png
       - images/
 
   # The following line ensures that the Material Icons font is

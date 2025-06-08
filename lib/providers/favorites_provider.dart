@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';  // Para ChangeNotifier
+import 'package:flutter/foundation.dart';  
 import '../models/product.dart';
 
 class FavoritesProvider with ChangeNotifier {
@@ -13,7 +13,7 @@ class FavoritesProvider with ChangeNotifier {
     } else {
       _favorites.add(product);
     }
-    notifyListeners();  // Ahora sí se reconoce
+    notifyListeners();  
   }
 
   bool isFavorite(Product product) {

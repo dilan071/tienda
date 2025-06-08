@@ -119,7 +119,7 @@ class ItemsWidget extends StatelessWidget {
                           color: Color(0xFF4C53A5),
                         ),
                         onPressed: () {
-                          // Acción para agregar al carrito
+                          
                         },
                       ),
                     ],

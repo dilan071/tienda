@@ -1,13 +1,13 @@
 // lib/pages/CartPage.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart'; 
+import 'package:uuid/uuid.dart';
 
 import '../providers/cart_provider.dart';
 import '../models/cart_item.dart' as ci;
 import '../widgets/CartAppBar.dart';
 import '../widgets/CartItemSamples.dart';
-import '../providers/orders_provider.dart'; 
+import '../providers/orders_provider.dart';
 import '../models/order.dart'; 
 
 class CartPage extends StatefulWidget {
@@ -54,17 +54,18 @@ class _CartPageState extends State<CartPage> {
       });
 
       await Future.delayed(Duration(seconds: 2)); 
+
       final now = DateTime.now();
-      final uuid = Uuid(); 
+      final uuid = Uuid();
 
       // Guardar cada ítem del carrito como una orden
       for (var item in items) {
         final order = Order(
           id: uuid.v4(), 
-          productName: item.product.title, 
+          productName: item.product.title,
           price: item.totalPrice,
           quantity: item.quantity,
-          imageUrl: item.product.image,  
+          imageUrl: item.product.image, 
           date: now,
         );
         orders.addOrder(order);

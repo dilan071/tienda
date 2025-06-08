@@ -22,7 +22,7 @@ class ProductFilterBar extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 🔍 Nombre
+        
         TextField(
           controller: searchController,
           decoration: InputDecoration(
@@ -34,7 +34,7 @@ class ProductFilterBar extends StatelessWidget {
         ),
         SizedBox(height: 12),
 
-        // 📂 Categoría
+        
         DropdownButtonFormField<String>(
           value: selectedCategory,
           decoration: InputDecoration(
@@ -50,7 +50,7 @@ class ProductFilterBar extends StatelessWidget {
         ),
         SizedBox(height: 12),
 
-        // 💵 Precio mínimo y máximo
+        
         Row(
           children: [
             Expanded(

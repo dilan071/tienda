@@ -1,10 +1,10 @@
- // lib/main.dart
+// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Screens/CheckoutPage.dart';
 import 'providers/cart_provider.dart';
 import 'providers/product_provider.dart';
-import 'providers/favorites_provider.dart'; // ✅ nuevo provider
+import 'providers/favorites_provider.dart'; 
 import 'Screens/Homepage.dart';
 import 'Screens/CartPage.dart';
 import 'Screens/ItemPage.dart';
