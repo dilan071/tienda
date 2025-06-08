@@ -1,15 +1,27 @@
+// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tienda/pages/CartPage.dart';
-import 'package:tienda/pages/Homepage.dart';
-import 'package:tienda/pages/ItemPage.dart';
-import 'package:tienda/providers/cart_provider.dart';
+
+import 'Screens/CheckoutPage.dart';
+import 'Screens/Homepage.dart';
+import 'Screens/CartPage.dart';
+import 'Screens/ItemPage.dart';
+import 'Screens/favorites_page.dart';
+import 'Screens/orders_page.dart';
+
+import 'controllers/product_controller.dart'; 
+import 'providers/cart_provider.dart';
+import 'providers/favorites_provider.dart';
+import 'providers/orders_provider.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CartProvider()), 
+        ChangeNotifierProvider(create: (_) => ProductController()), // NUEVO
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
       child: MyApp(),
     ),
@@ -24,11 +36,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: '/', 
+      initialRoute: '/',
       routes: {
-        "/": (context) => HomePage(),  
+        '/': (context) => HomePage(),
         '/cartPage': (context) => CartPage(),
-        "itemPage": (context) => ItemPage(), 
+        '/orders': (context) => OrdersPage(),
+        '/itemPage': (context) => ItemPage(), // Corregido agregando /
+        CheckoutPage.routeName: (context) => CheckoutPage(),
+        '/favorites': (context) => FavoritesPage(),
       },
     );
   }

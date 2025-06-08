@@ -55,7 +55,7 @@ class CartAppBar extends StatelessWidget implements PreferredSizeWidget {
           leading: Icon(Icons.delete_outline),
           title: Text("Vaciar carrito"),
           onTap: () {
-            // TODO: implementar lógica para vaciar el carrito
+           
             Navigator.pop(ctx);
           },
         ),

@@ -1,7 +1,7 @@
+// lib/widgets/CartItemSamples.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../pages/CartPage.dart';
+import '../models/cart_item.dart';
 
 class CartItemSamples extends StatelessWidget {
   final List<CartItem> items;
@@ -32,48 +32,38 @@ class CartItemSamples extends StatelessWidget {
           ),
           child: Row(
             children: [
-              // Selección o checkbox si es necesario
-              Radio<bool>(
-                value: true,
-                groupValue: true,
-                activeColor: Color(0xFF4C53A5),
-                onChanged: (_) {},
-              ),
-              Container(
-                height: 70,
+              Image.network(
+                item.product.image,
                 width: 70,
-                margin: EdgeInsets.only(right: 15),
-                child: Image.asset(item.imagePath),
+                height: 70,
+                fit: BoxFit.cover,
+                errorBuilder: (context, _, __) => Icon(Icons.broken_image),
               ),
+              SizedBox(width: 10),
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        item.title,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4C53A5),
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item.product.title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF4C53A5),
                       ),
-                      Text(
-                        '\\${item.price.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4C53A5),
-                        ),
+                    ),
+                    Text(
+                      '\\${item.product.price.toStringAsFixed(2)}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF4C53A5),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
@@ -82,52 +72,14 @@ class CartItemSamples extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: () => onIncrement(i),
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                spreadRadius: 1,
-                                blurRadius: 10,
-                              ),
-                            ],
-                          ),
-                          child: Icon(CupertinoIcons.plus, size: 18),
-                        ),
+                      IconButton(
+                        icon: Icon(CupertinoIcons.minus),
+                        onPressed: () => onDecrement(i),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          item.quantity.toString(),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4C53A5),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => onDecrement(i),
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                spreadRadius: 1,
-                                blurRadius: 10,
-                              ),
-                            ],
-                          ),
-                          child: Icon(CupertinoIcons.minus, size: 18),
-                        ),
+                      Text(item.quantity.toString()),
+                      IconButton(
+                        icon: Icon(CupertinoIcons.plus),
+                        onPressed: () => onIncrement(i),
                       ),
                     ],
                   ),

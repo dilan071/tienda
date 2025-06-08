@@ -31,7 +31,7 @@ class CartBottomNavBar extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '\\${total.toStringAsFixed(2)}',
+                  '\$${total.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -40,16 +40,18 @@ class CartBottomNavBar extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              alignment: Alignment.center,
-              height: 50,
+            SizedBox(
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xFF4C53A5),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: InkWell(
-                onTap: onCheckout,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: onCheckout,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF4C53A5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  elevation: 4,
+                ),
                 child: Text(
                   "Check Out",
                   style: TextStyle(
@@ -59,7 +61,7 @@ class CartBottomNavBar extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

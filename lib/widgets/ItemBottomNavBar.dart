@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ItemBottomNavBar extends StatelessWidget {
-  final double price; // Precio del producto
-  final VoidCallback onAddToCart; // Callback para agregar al carrito
+  final double price; 
+  final VoidCallback onAddToCart; 
 
   const ItemBottomNavBar({
     Key? key,
@@ -32,33 +32,33 @@ class ItemBottomNavBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Muestra el precio del producto con formato
+            
             Text(
-              '\$${price.toStringAsFixed(2)}', // Formatea el precio con dos decimales
+              '\$${price.toStringAsFixed(2)}', 
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF4C53A5), // Color del precio
+                color: Color(0xFF4C53A5), 
               ),
             ),
             // Botón para añadir al carrito
             ElevatedButton.icon(
-              onPressed: onAddToCart, // Llama al callback cuando se presiona
-              icon: Icon(CupertinoIcons.cart_badge_plus), // Icono de carrito
+              onPressed: onAddToCart, 
+              icon: Icon(CupertinoIcons.cart_badge_plus), 
               label: Text(
-                "Add to cart", // Texto del botón
+                "Add to cart", 
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xFF4C53A5)), // Color de fondo
+                backgroundColor: MaterialStateProperty.all(Color(0xFF4C53A5)), 
                 padding: MaterialStateProperty.all(
-                  EdgeInsets.symmetric(vertical: 13, horizontal: 15), // Padding interno
+                  EdgeInsets.symmetric(vertical: 13, horizontal: 15), 
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), // Bordes redondeados
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), 
                 ),
               ),
             ),

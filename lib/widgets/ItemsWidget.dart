@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/product.dart';
+import '../providers/favorites_provider.dart';
 
 class ItemsWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> productos;
+  final List<Product> productos;
 
   const ItemsWidget({
     Key? key,
@@ -14,112 +17,117 @@ class ItemsWidget extends StatelessWidget {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemCount: productos.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 0.68,
       ),
       itemBuilder: (context, index) {
         final producto = productos[index];
-        return Container(
-          padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 6,
-                offset: Offset(0, 3),
+
+        return Consumer<FavoritesProvider>(
+          builder: (context, favProv, _) {
+            final isFavorite = favProv.isFavorite(producto);
+
+            return Container(
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 1,
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if ((producto['descuento'] as int) > 0)
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF4C53A5),
-                        borderRadius: BorderRadius.circular(20),
+                  // Icono de favorito
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          favProv.toggleFavorite(producto);
+                        },
                       ),
-                      child: Text(
-                        "-${producto['descuento']}%",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'itemPage',
+                          arguments: producto);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      child: Image.network(
+                        producto.image,
+                        height: 120,
+                        width: 120,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.broken_image,
+                            size: 120,
+                            color: Colors.grey,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  Text(
+                    producto.title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF4C53A5),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    producto.description,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF4C53A5),
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '\$${producto.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color: Color(0xFF4C53A5),
                         ),
                       ),
-                    ),
-                  Icon(
-                    Icons.favorite_border,
-                    color: Colors.red,
+                      IconButton(
+                        icon: const Icon(
+                          Icons.shopping_cart_checkout,
+                          color: Color(0xFF4C53A5),
+                        ),
+                        onPressed: () {
+                          // Acción para agregar al carrito
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, 'itemPage');
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  child: Image.asset(
-                    producto['imagen'],
-                    height: 120,
-                    width: 120,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              Text(
-                producto['titulo'],
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF4C53A5),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                producto['descripcion'],
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFF4C53A5),
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '\\${(producto['precio'] as double).toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4C53A5),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.shopping_cart_checkout,
-                      color: Color(0xFF4C53A5),
-                    ),
-                    onPressed: () {
-                      // acción al añadir al carrito
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

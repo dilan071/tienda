@@ -7,7 +7,7 @@ class EmptyState extends StatelessWidget {
   const EmptyState({
     Key? key,
     this.message = 'Ups! no hay nada por aquí.',
-    this.imageAsset = 'assets/ic_empty_state.png',
+    this.imageAsset = 'assets/no tengo imagenes de momento',
   }) : super(key: key);
 
   @override
