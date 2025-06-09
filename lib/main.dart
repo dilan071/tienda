@@ -13,8 +13,13 @@ import 'controllers/product_controller.dart';
 import 'providers/cart_provider.dart';
 import 'providers/favorites_provider.dart';
 import 'providers/orders_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:tienda/auth/login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
       providers: [
@@ -33,13 +38,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
-        '/': (context)          => HomePage(),
-        '/cartPage': (context)  => CartPage(),
+        '/': (context) => HomePage(),
+        '/cartPage': (context) => CartPage(),
         '/favorites': (context) => FavoritesPage(),
-        '/orders': (context)    => OrdersPage(),
-        '/itemPage': (context)  => ItemPage(),
+        '/orders': (context) => OrdersPage(),
+        '/itemPage': (context) => ItemPage(),
+        '/login': (context) => LoginScreen(),
         CheckoutPage.routeName: (context) => CheckoutPage(),
       },
     );
