@@ -46,8 +46,8 @@ class LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
               Image.asset(
                 'images/ROMAFINIRF(sinfondo).png',
-                width: 200,
-                height: 100,
+                width: 500,
+                height: 500,
               ),
               const SizedBox(height: 20),
               TextField(

@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -14,7 +13,6 @@ class AuthService {
         password: password,
       );
     } on FirebaseAuthException {
-      // print('Login failed: $e');
       return null;
     }
   }
@@ -29,7 +27,6 @@ class AuthService {
         password: password,
       );
     } on FirebaseAuthException {
-      // print('Registration failed: $e');
       return null;
     }
   }

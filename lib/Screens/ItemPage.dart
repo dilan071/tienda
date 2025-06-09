@@ -1,4 +1,3 @@
-// lib/pages/ItemPage.dart
 import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import '../widgets/ItemAppBar.dart';
 import '../widgets/ItemBottomNavBar.dart';
 
 class ItemPage extends StatefulWidget {
-  static const String routeName = '/itemPage'; 
+  static const String routeName = '/itemPage';
 
   @override
   _ItemPageState createState() => _ItemPageState();
@@ -45,14 +44,17 @@ class _ItemPageState extends State<ItemPage> {
   void _addToCart(Product product) {
     Provider.of<CartProvider>(context, listen: false).addProduct(product);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Añadido al carrito: \$${product.price} x $_quantity')),
+      SnackBar(
+        content: Text('Añadido al carrito: \$${product.price} x $_quantity'),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     // Recibe el producto a través de arguments
-    final Product product = ModalRoute.of(context)!.settings.arguments as Product;
+    final Product product =
+        ModalRoute.of(context)!.settings.arguments as Product;
 
     return Scaffold(
       backgroundColor: const Color(0xFFEDDCF2),
@@ -70,8 +72,9 @@ class _ItemPageState extends State<ItemPage> {
               product.image,
               height: 300,
               fit: BoxFit.contain,
-              errorBuilder: (context, error, stack) =>
-                  const Icon(Icons.broken_image, size: 300),
+              errorBuilder:
+                  (context, error, stack) =>
+                      const Icon(Icons.broken_image, size: 300),
             ),
           ),
           Arc(
@@ -105,20 +108,28 @@ class _ItemPageState extends State<ItemPage> {
                           direction: Axis.horizontal,
                           itemCount: 5,
                           itemSize: 20,
-                          itemPadding: const EdgeInsets.symmetric(horizontal: 4),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.favorite,
-                            color: Color(0xFF4C53A5),
+                          itemPadding: const EdgeInsets.symmetric(
+                            horizontal: 4,
                           ),
+                          itemBuilder:
+                              (context, _) => const Icon(
+                                Icons.favorite,
+                                color: Color(0xFF4C53A5),
+                              ),
                           onRatingUpdate: (rating) {
                             setState(() => _rating = rating);
                           },
                         ),
                         Row(
                           children: [
-                            _buildQuantityButton(CupertinoIcons.minus, _decreaseQuantity),
+                            _buildQuantityButton(
+                              CupertinoIcons.minus,
+                              _decreaseQuantity,
+                            ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                              ),
                               child: Text(
                                 _quantity.toString(),
                                 style: const TextStyle(
@@ -128,7 +139,10 @@ class _ItemPageState extends State<ItemPage> {
                                 ),
                               ),
                             ),
-                            _buildQuantityButton(CupertinoIcons.plus, _increaseQuantity),
+                            _buildQuantityButton(
+                              CupertinoIcons.plus,
+                              _increaseQuantity,
+                            ),
                           ],
                         ),
                       ],
@@ -157,17 +171,17 @@ class _ItemPageState extends State<ItemPage> {
                         onPressed: () => _addToCart(product),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 60),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                            horizontal: 60,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
                         child: const Text(
                           "Add to Cart",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
                     ),
@@ -192,12 +206,7 @@ class _ItemPageState extends State<ItemPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 8,
-          ),
-        ],
+        boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 8)],
       ),
       child: IconButton(
         icon: Icon(icon, size: 18, color: const Color(0xFF4C53A5)),

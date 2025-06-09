@@ -1,14 +1,17 @@
+// lib/widgets/HomeAppBar.dart
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int cartItemCount;
   final VoidCallback onCartTap;
+  final VoidCallback? onMenuTap; // NUEVO
 
   const HomeAppBar({
     Key? key,
     required this.cartItemCount,
     required this.onCartTap,
+    this.onMenuTap, // NUEVO
   }) : super(key: key);
 
   @override
@@ -21,10 +24,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       padding: EdgeInsets.all(25),
       child: Row(
         children: [
-          Icon(
-            Icons.sort,
-            size: 30,
-            color: Color(0xFF4C53A5),
+          IconButton(
+            icon: const Icon(Icons.sort, size: 30, color: Color(0xFF4C53A5)),
+            onPressed: onMenuTap, // USAMOS onMenuTap
           ),
           Padding(
             padding: EdgeInsets.only(left: 20),
@@ -45,10 +47,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             badgeContent: Text(
               cartItemCount.toString(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-              ),
+              style: TextStyle(color: Colors.white, fontSize: 12),
             ),
             child: InkWell(
               onTap: onCartTap,

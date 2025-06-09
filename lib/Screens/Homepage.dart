@@ -1,11 +1,12 @@
-// lib/pages/HomePage.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import '../services/auth_services.dart';
 import '../controllers/filter_controller.dart';
-import '../controllers/product_controller.dart';  
+import '../controllers/product_controller.dart';
 import '../providers/cart_provider.dart';
 
 import '../widgets/CategoriesWidgets.dart';
@@ -46,7 +47,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // Al iniciar, carga la primera categoría
     WidgetsBinding.instance.addPostFrameCallback((_) => _fetchCategory());
   }
 
@@ -58,9 +58,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _fetchCategory() {
-    // Llama al controller en lugar del provider
-    context.read<ProductController>()
-      .fetchByCategory(_apiCategories[_selectedCategoryIndex]);
+    context.read<ProductController>().fetchByCategory(
+      _apiCategories[_selectedCategoryIndex],
+    );
   }
 
   void _onCategoryTap(int index) {
@@ -101,21 +101,22 @@ class _HomePageState extends State<HomePage> {
   Future<void> _showFavoritesOrdersMenu() async {
     final selected = await showModalBottomSheet<String>(
       context: context,
-      builder: (context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text('Favoritos'),
-            onTap: () => Navigator.pop(context, 'favorites'),
+      builder:
+          (context) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.favorite),
+                title: Text('Favoritos'),
+                onTap: () => Navigator.pop(context, 'favorites'),
+              ),
+              ListTile(
+                leading: Icon(Icons.history),
+                title: Text('Historial de Pedidos'),
+                onTap: () => Navigator.pop(context, 'orders'),
+              ),
+            ],
           ),
-          ListTile(
-            leading: Icon(Icons.history),
-            title: Text('Historial de Pedidos'),
-            onTap: () => Navigator.pop(context, 'orders'),
-          ),
-        ],
-      ),
     );
     if (selected == 'favorites') {
       Navigator.pushNamed(context, '/favorites');
@@ -124,11 +125,74 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _showOptionsDrawer() async {
+    final authService = AuthService();
+    final user = FirebaseAuth.instance.currentUser;
+
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Menu',
+      barrierColor: Colors.black54,
+      pageBuilder: (context, anim1, anim2) {
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: FractionallySizedBox(
+            widthFactor: 0.5, // 50% del ancho de la pantalla
+            child: Material(
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (user == null) ...[
+                    const Text(
+                      'Hello, Sign In',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      child: const Text('Sign In'),
+                    ),
+                  ] else ...[
+                    Text(
+                      'Hello, ${user.email}',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await authService.logout();
+                        Navigator.pop(context);
+                        setState(() {}); // refrescar
+                      },
+                      child: const Text('Log Out'),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        final curvedValue = Curves.easeInOut.transform(anim1.value) - 1.0;
+        return Transform.translate(
+          offset: Offset(curvedValue * -300, 0), // animación izquierda
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductController>(
       builder: (context, productCtrl, _) {
-        // Aplica filtros usando FilterController
         final filteredProducts = FilterController.filterProducts(
           products: productCtrl.products,
           searchQuery: _searchQuery,
@@ -142,6 +206,8 @@ class _HomePageState extends State<HomePage> {
               HomeAppBar(
                 cartItemCount: context.watch<CartProvider>().items.length,
                 onCartTap: () => Navigator.pushNamed(context, '/cartPage'),
+                onMenuTap:
+                    _showOptionsDrawer, // <<< ahora usa _showOptionsDrawer
               ),
               Container(
                 padding: const EdgeInsets.only(top: 15),
@@ -154,11 +220,12 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Column(
                   children: [
-                    // Título Categorías
                     Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 15),
+                        vertical: 20,
+                        horizontal: 15,
+                      ),
                       child: const Text(
                         'Categories',
                         style: TextStyle(
@@ -168,21 +235,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    // Lista horizontal de categorías
                     CategoriesWidgets(
                       categories: _categories,
                       selectedIndex: _selectedCategoryIndex,
                       onCategoryTap: _onCategoryTap,
                     ),
-
                     const SizedBox(height: 10),
-
-                    // Barra de búsqueda
                     ProductSearchBar(onChanged: _updateSearchQuery),
-
                     const SizedBox(height: 10),
-
-                    // Filtros de precio + botón limpiar filtros
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
@@ -234,14 +294,13 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
-                    // Título Best Selling
                     Container(
                       alignment: Alignment.centerLeft,
                       margin: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 15),
+                        vertical: 20,
+                        horizontal: 15,
+                      ),
                       child: const Text(
                         'Best Selling',
                         style: TextStyle(
@@ -251,8 +310,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-
-                    // Estado de carga / error / lista filtrada
                     if (productCtrl.isLoading)
                       const Loading()
                     else if (productCtrl.errorMessage != null)
@@ -271,8 +328,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-
-          // Navegación curva inferior
           bottomNavigationBar: CurvedNavigationBar(
             backgroundColor: Colors.transparent,
             height: 70,

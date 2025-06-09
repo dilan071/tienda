@@ -19,8 +19,8 @@ dependencies:
   uuid: ^4.0.0
   http: ^0.13.6
   shared_preferences: ^2.2.2
-  firebase_core: ^2.32.0 # ESTA ES LA VERSIÓN CORRECTA
-  firebase_auth: ^4.20.0 # ÚLTIMA COMPATIBLE CON firebase_core ^2.32.0
+  firebase_core: ^2.32.0 
+  firebase_auth: ^4.20.0
   sqflite: ^2.3.2
   path: ^1.8.3
   
